@@ -8,6 +8,50 @@ class Enemy():
         self.rect = rect.Rect(randint(1500, 3000), randint(0, 700), 50, 50)
         self.collision = collision
         enemies.append(self)
+    
+def refresh_enemies():
+    global lives
+    for enemy in enemies:
+        draw.rect(w, (255, 0, 0), enemy.rect)
+        enemy.rect.x -= speed
+        if enemy.rect.colliderect(vehicle):
+            if enemy.collision == False:
+                enemy.collision = True
+                lives -= 1
+        if enemy.rect.x <= 0:
+            enemy.rect.x = 1500
+            enemy.rect.y = randint(0, 700)
+            enemy.collision = False
+
+def check_finish():
+    global close
+    global win
+    marker.x -= speed
+    if marker.x <= -30000:
+        close = True
+        win = True
+    if lives <= 0:
+        close = True
+
+def move_vehicle():
+    global speed
+    keyspressed = key.get_pressed()
+    if keyspressed[K_d] or keyspressed[K_RIGHT]:
+        accelerate = True
+    else:
+        accelerate = False
+    if (keyspressed[K_w] or keyspressed[K_UP]) and vehicle.y > 0:
+        vehicle.y -= 10
+    if (keyspressed[K_s] or keyspressed[K_DOWN]) and vehicle.y < 720:
+        vehicle.y += 10
+    if accelerate:
+        if speed <= 300:
+            speed += 1
+    elif speed > 0:
+        speed -= 1  
+    if speed < 0:
+        speed = 0
+    draw.rect(w, (0, 255, 0), vehicle)
 
 closeall = False
 while closeall == False:
@@ -33,40 +77,9 @@ while closeall == False:
             if i.type == QUIT:
                 close = True
                 closeall = True
-        keyspressed = key.get_pressed()
-        if keyspressed[K_d] or keyspressed[K_RIGHT]:
-            accelerate = True
-        else:
-            accelerate = False
-        if (keyspressed[K_w] or keyspressed[K_UP]) and vehicle.y > 0:
-            vehicle.y -= 10
-        if (keyspressed[K_s] or keyspressed[K_DOWN]) and vehicle.y < 720:
-            vehicle.y += 10
-        if accelerate:
-            if speed <= 300:
-                speed += 1
-        elif speed > 0:
-            speed -= 1  
-        if speed < 0:
-            speed = 0
-        draw.rect(w, (0, 255, 0), vehicle)
-        for enemy in enemies:
-            draw.rect(w, (255, 0, 0), enemy.rect)
-            enemy.rect.x -= speed
-            if enemy.rect.colliderect(vehicle):
-                if enemy.collision == False:
-                    enemy.collision = True
-                    lives -= 1
-            if enemy.rect.x <= 0:
-                enemy.rect.x = 1500
-                enemy.rect.y = randint(0, 700)
-                enemy.collision = False
-        marker.x -= speed
-        if marker.x <= -30000:
-            close = True
-            win = True
-        if lives <= 0:
-            close = True
+        move_vehicle()
+        refresh_enemies()
+        check_finish()
         display.update()
         clock.tick(60)
     end = t()
