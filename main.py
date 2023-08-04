@@ -71,8 +71,8 @@ while closeall == False:
     start = t()
     while close == False:
         w.fill((255, 255, 255))
-        w.blit(font.Font(None, 50).render('speed:' + str(speed), True, (0, 0, 0)), (100, 0))
-        w.blit(font.Font(None, 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
+        w.blit(font.SysFont('Arial', 50).render('speed:' + str(speed), True, (0, 0, 0)), (100, 0))
+        w.blit(font.SysFont('Arial', 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
         for i in event.get():
             if i.type == QUIT:
                 close = True
@@ -96,8 +96,8 @@ while closeall == False:
             keyspressed = key.get_pressed()
             if keyspressed[K_1]:
                 close = True
-            w.blit(font.Font(None, 50).render('you win! (1-try again)', True, (255, 0, 0)), (100, 100))
-            w.blit(font.Font(None, 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
+            w.blit(font.SysFont('Arial', 50).render('you win! (1-try again)', True, (255, 0, 0)), (100, 100))
+            w.blit(font.SysFont('Arial', 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
             display.update()
             clock.tick(60)
     else:
@@ -113,6 +113,6 @@ while closeall == False:
             keyspressed = key.get_pressed()
             if keyspressed[K_1]:
                 close = True
-            w.blit(font.Font(None, 50).render('Game over (1-try again)', True, (255, 0, 0)), (100, 100))
+            w.blit(font.SysFont('Arial', 50).render('Game over (1-try again)', True, (255, 0, 0)), (100, 100))
             display.update()
             clock.tick(60)
