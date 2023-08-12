@@ -55,6 +55,8 @@ def move_vehicle():
             speed += 0.5
     if deccelerate and speed > 0:
         speed -= 1  
+    if accelerate == False and deccelerate == False:
+        speed -= 0.05
     if speed < 0:
         speed = 0
     draw.rect(w, (0, 255, 0), vehicle)
