@@ -1,7 +1,6 @@
 from pygame import *
 init()
 from random import randint
-from time import time as t
 
 class Enemy():
     def __init__(self, collision):
@@ -76,8 +75,8 @@ while closeall == False:
     close = False
     accelerate = False
     deccelerate = False
+    timevar = 0
     win = False
-    start = t()
     while close == False:
         w.fill((255, 255, 255))
         w.blit(font.SysFont('Arial', 50).render('speed:' + str(int(speed)), True, (0, 0, 0)), (100, 0))
@@ -87,11 +86,11 @@ while closeall == False:
                 close = True
                 closeall = True
         move_vehicle()
+        timevar += 1
         refresh_enemies()
         check_finish()
         display.update()
         clock.tick(60)
-    end = t()
     if win:
         close = False
         while close == False:
@@ -106,7 +105,7 @@ while closeall == False:
             if keyspressed[K_1]:
                 close = True
             w.blit(font.SysFont('Arial', 50).render('you win! (1-try again)', True, (255, 0, 0)), (100, 100))
-            w.blit(font.SysFont('Arial', 50).render('time:' + str(end - start) + ' seconds', True, (255, 0, 0)), (100, 150))
+            w.blit(font.SysFont('Arial', 50).render('time:' + str(timevar/60) + ' seconds', True, (255, 0, 0)), (100, 150))
             display.update()
             clock.tick(60)
     else:
