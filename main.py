@@ -11,7 +11,6 @@ class Enemy():
 def refresh_enemies():
     global lives
     for enemy in enemies:
-        draw.rect(w, (255, 0, 0), enemy.rect)
         enemy.rect.x -= int(speed)
         if enemy.rect.colliderect(vehicle):
             if enemy.collision == False:
@@ -58,7 +57,6 @@ def move_vehicle():
         speed -= 0.05
     if speed < 0:
         speed = 0
-    draw.rect(w, (0, 255, 0), vehicle)
 
 closeall = False
 while closeall == False:
@@ -77,18 +75,34 @@ while closeall == False:
     deccelerate = False
     timevar = 0
     win = False
+    pausevar = False
+    pausewait = 0
     while close == False:
+        if pausewait > 30:
+            keys = key.get_pressed()
+            if keys[K_1]:
+                if pausevar:
+                    pausevar = False
+                else:
+                    pausevar = True
+                pausewait = 0
+        pausewait += 1
         w.fill((255, 255, 255))
+        draw.rect(w, (0, 255, 0), vehicle)
+        for enemy in enemies:
+            draw.rect(w, (255, 0, 0), enemy.rect)
         w.blit(font.SysFont('Arial', 50).render('speed:' + str(int(speed)), True, (0, 0, 0)), (100, 0))
         w.blit(font.SysFont('Arial', 50).render('lives:' + str(lives), True, (0, 0, 0)), (300, 0))
+        w.blit(font.SysFont('Arial', 50).render('1-pause' , True, (0, 0, 0)), (100, 700))
         for i in event.get():
             if i.type == QUIT:
                 close = True
                 closeall = True
-        move_vehicle()
-        timevar += 1
-        refresh_enemies()
-        check_finish()
+        if not pausevar:
+            move_vehicle()
+            timevar += 1
+            refresh_enemies()
+            check_finish()
         display.update()
         clock.tick(60)
     if win:
